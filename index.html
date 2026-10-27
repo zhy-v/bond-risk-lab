@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>债券利率风险实验台</title>
+<style>
+:root{--ink:#142d3b;--teal:#087f82;--paper:#f3f5f1;--line:#d3dedb;--red:#a54432}*{box-sizing:border-box}body{margin:0;font:16px/1.7 system-ui,'Microsoft YaHei',sans-serif;color:var(--ink);background:var(--paper)}header,main,footer{max-width:1180px;margin:auto;padding:30px}header{border-bottom:1px solid var(--line)}.eyebrow{font-size:13px;letter-spacing:.15em;color:var(--teal)}h1{font-size:clamp(28px,4vw,43px);margin:12px 0 6px}h2{font-size:23px;margin:0 0 16px}h3{font-size:18px;margin:22px 0 8px}.sub{color:#526872;max-width:830px;margin:0}nav{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px}a{color:var(--teal)}.layout{display:grid;grid-template-columns:300px 1fr;gap:34px}.controls{padding-right:28px;border-right:1px solid var(--line)}label{display:block;margin:13px 0 3px;font-size:14px;font-weight:600}input,select,button{font:inherit;padding:9px 11px;border:1px solid #a9bfbb;border-radius:5px;background:white;color:var(--ink)}input,select{width:100%}button{cursor:pointer}button:hover{border-color:var(--teal);color:var(--teal)}.presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}.presets button{font-size:13px}.primary{background:var(--teal);color:white;border-color:var(--teal)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.metric{border-top:3px solid var(--teal);padding:10px 0}.metric small{display:block;color:#526872}.metric strong{font-size:25px;font-variant-numeric:tabular-nums}.explanation{background:#e2eeea;padding:18px 20px;margin:18px 0}.fine{font-size:13px;color:#526872}.negative{color:var(--red)}section{margin-bottom:34px}table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}th{background:#e3ebe7}caption{text-align:left;margin:8px 0;color:#526872}.scroll{overflow:auto}svg{display:block;width:100%;height:auto;background:white;border:1px solid var(--line)}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.legend span:before{content:'—';font-weight:bold;margin-right:6px}.err{color:var(--red);font-weight:600;min-height:1.7em}details{border-top:1px solid var(--line);padding:13px 0}summary{cursor:pointer;font-weight:600}code{background:#e5ece8;padding:2px 5px}footer{border-top:1px solid var(--line);font-size:13px;color:#526872}.smallbutton{margin-top:10px;width:100%}#status{font-size:13px;color:var(--teal)}@media(max-width:800px){header,main,footer{padding:20px}.layout{grid-template-columns:1fr}.controls{border:0;padding:0}.metrics{grid-template-columns:repeat(2,1fr)}.controls form{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.wide{grid-column:1/-1}}@media print{.controls,nav,button{display:none}.layout{display:block}body{background:white}section{break-inside:avoid}}
+.layout > *{min-width:0}.scroll{max-width:100%}input,select{min-width:0}form > div{min-width:0}th,td{white-space:nowrap}html{overflow-x:hidden}</style></head><body>
+<header><div class="eyebrow">BOND RISK LAB · 期中原型 v0.1</div><h1>有票息，为什么还会亏损？</h1><p class="sub">把债券的每笔现金流展开，观察市场利率、剩余期限与持有期如何影响价格和回报。所有预设均为教学情景，不代表真实证券或实时行情。</p><nav><a href="#lab">风险实验</a><a href="#flows">现金流明细</a><a href="#method">计算口径</a><a href="#project">项目与对标</a></nav></header>
+<main><div class="layout" id="lab"><aside class="controls"><h2>设置实验</h2><div class="presets"><button data-preset="long">10年期低息债</button><button data-preset="short">2年期对照</button><button data-preset="zero">零息债</button></div>
+<form id="form"><div><label for="face">面值（元）</label><input id="face" type="number" min="1" max="1000000000" step="1" value="1000" required></div><div><label for="coupon">票面年利率（%）</label><input id="coupon" type="number" min="0" max="100" step="0.1" value="2" required></div><div><label for="yield">买入到期收益率（%）</label><input id="yield" type="number" min="-49" max="100" step="0.1" value="2" required></div><div><label for="years">买入时剩余期限（整年）</label><input id="years" type="number" min="1" max="50" step="1" value="10" required></div><div><label for="freq">每年付息次数</label><select id="freq"><option value="1">1次</option><option value="2">2次</option><option value="4">4次</option></select></div><div><label for="bp">收益率平移冲击（bp）</label><input id="bp" type="number" min="-500" max="500" step="25" value="100" required></div><div><label for="hold">持有期（整年）</label><input id="hold" type="number" min="1" max="50" value="1" required></div><div><label for="reinvest">票息处理</label><select id="reinvest"><option value="0">收取后不再投资</option><option value="1">按冲击后收益率再投资</option></select></div><div class="wide"><button class="primary smallbutton" type="submit">更新实验结果</button><button class="smallbutton" id="export" type="button">导出情景与现金流 CSV</button><button class="smallbutton" id="save" type="button">保存本机参数</button><button class="smallbutton" id="restore" type="button">恢复本机参数</button><div id="status" role="status"></div></div></form><p class="fine">1 bp = 0.01个百分点。+100 bp 表示从2%升至3%。输入只在本机计算，不上传个人信息。</p></aside>
+<div><p id="error" class="err" role="alert"></p><section aria-live="polite"><h2>先看结果，再解释原因</h2><div id="metrics" class="metrics"></div><div id="explain" class="explanation"></div><p class="fine">即时价格冲击与持有期回报采用不同时间点，不能直接混用。持有期设定为冲击后收益率保持不变，持有期末在付息后出售或到期收回本金。</p></section>
+<section><h2>收益率上升，价格如何变化？</h2><svg id="chart" viewBox="0 0 760 330" role="img" aria-label="收益率冲击与价格变化，比较精确定价、修正久期与久期凸性近似"></svg><div class="legend"><span style="color:#087f82">精确定价</span><span style="color:#c16f29">久期近似</span><span style="color:#675aa4">久期加凸性</span></div><div class="scroll"><table id="scenario"><caption>同一时点的平行利率冲击；误差单位为价格变动百分比的基点</caption></table></div></section>
+<section id="flows"><h2>把价格拆回每一笔现金流</h2><p>下表基于买入收益率折现，末期现金流包含本金。现金流现值权重是麦考利久期的计算基础。</p><div class="scroll" style="max-height:360px"><table id="cashflows"></table></div></section></div></div>
+<section id="method"><h2>计算口径与适用边界</h2><details open><summary>价格、久期和凸性</summary><p>输入 y 为按付息频率复利的名义年化到期收益率。每期票息为 F × c / m，期数 n = T × m。价格为各期现金流按 (1 + y/m) 的期数次方折现后求和。</p><p>麦考利久期是现金流现值加权的时间；修正久期 = 麦考利久期 / (1 + y/m)。价格变化率近似为 −修正久期 × Δy；加入凸性后再加 0.5 × 凸性 × Δy²。DV01 是收益率增加1 bp的价格损失的一阶近似，单位为元/每张债券。</p></details><details><summary>持有期回报和再投资</summary><p>总回报 =（期末出售价格或本金 + 期间票息终值 − 买入价格）/ 买入价格。收益率在买入后立即受到冲击并保持不变。若启用再投资，票息按冲击后收益率及相同付息频率复利。</p><p>持有期年化回报采用期末总财富计算的有效年化率；半年付息时，不能直接与名义年化YTM比较，应先转换为 (1+y/m)^m−1。</p></details><details><summary>模型暂不覆盖什么</summary><p>仅覆盖无违约、无嵌入期权、规则付息、在付息日估值的固定利率债券；不处理真实日期、应计利息、净价全价差、税费、信用与流动性利差变化、非平行曲线冲击或债券基金净值。久期和凸性都不能替代精确定价及其他风险分析。</p></details></section>
+<section id="project"><h2>课程问题与行业对标</h2><p>课程对应第三章3.1与3.3、第十二章债券定价与投资，以及第十七章银行资产负债管理。本原型用于解释机制和核验算式，尚未验证对学习效果的提升。</p><p>行业对标一：<a href="https://www.pimco.com/us/en/resources/education/bonds-102-the-importance-of-duration-in-bond-investing" target="_blank" rel="noreferrer">PIMCO 久期教育材料</a>，对照风险解释方式。行业对标二：<a href="https://www.quantlib.org/" target="_blank" rel="noreferrer">QuantLib</a>，对照专业定价与风险分析框架；当前尚未完成与其数值交叉验证。</p><p>理论核验：<a href="https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/interest-rate-risk-and-return" target="_blank" rel="noreferrer">CFA Institute 关于利率风险与回报的说明</a>。浏览来源日期：2026年10月27日。</p><p class="fine">v0.1 已完成规则现金流、价格/久期/凸性、持有期情景和CSV导出。后续计划加入真实日期、净价全价、独立定价库校验、用户测试及组合分析。</p></section></main><footer>教学情景分析 · 不提供具体证券买卖建议 · 期中基准版本 v0.1 · 2026年10月27日</footer>
+<script>
+(function(root){
+  'use strict';
+  function check(b){
+    if(![b.face,b.coupon,b.yield,b.years,b.freq].every(Number.isFinite)) throw Error('请输入有效数字');
+    if(b.face<=0||b.face>1e9||b.coupon<0||b.coupon>1||b.yield<=-0.5||b.yield>1||![1,2,4].includes(b.freq)||!Number.isInteger(b.years)||b.years<1||b.years>50) throw Error('面值须为正；票息0–100%；收益率大于−50%且不超过100%；期限1–50整年');
+  }
+  function price(b,y=b.yield,years=b.years){
+    if(years===0)return 0;
+    if(y<=-b.freq)throw Error('收益率超出折现范围');
+    let p=0,n=Math.round(years*b.freq),c=b.face*b.coupon/b.freq;
+    for(let k=1;k<=n;k++)p+=(c+(k===n?b.face:0))/Math.pow(1+y/b.freq,k);
+    return p;
+  }
+  function analyze(b){
+    check(b);let p=price(b),d=0,cv=0,rows=[],n=b.years*b.freq;
+    for(let k=1;k<=n;k++){
+      let t=k/b.freq,cf=b.face*b.coupon/b.freq+(k===n?b.face:0),pv=cf/Math.pow(1+b.yield/b.freq,k);
+      d+=t*pv;cv+=pv*k*(k+1)/(b.freq*b.freq*Math.pow(1+b.yield/b.freq,2));
+      rows.push({period:k,year:t,cashflow:cf,pv,weight:pv/p});
+    }
+    d/=p;cv/=p;let modified=d/(1+b.yield/b.freq);
+    return {price:p,macaulay:d,modified,convexity:cv,dv01:p*modified*0.0001,rows};
+  }
+  function shock(b,bp){
+    let a=analyze(b),dy=bp/10000,p=price(b,b.yield+dy),exact=p/a.price-1,linear=-a.modified*dy,quadratic=linear+0.5*a.convexity*dy*dy;
+    return {bp,newYield:b.yield+dy,price:p,exact,linear,quadratic,errorLinear:(linear-exact)*10000,errorQuadratic:(quadratic-exact)*10000};
+  }
+  function holding(b,bp,h,reinvest=false){
+    check(b);if(!Number.isInteger(h)||h<1||h>b.years)throw Error('持有期须为1至剩余期限之间的整年');
+    let p0=price(b),y=b.yield+bp/10000,c=b.face*b.coupon/b.freq,coupons=0;
+    if(y<=-b.freq)throw Error('冲击后收益率超出折现范围');
+    for(let k=1;k<=h*b.freq;k++)coupons+=c*(reinvest?Math.pow(1+y/b.freq,h*b.freq-k):1);
+    let terminal=b.years===h?b.face:price(b,y,b.years-h),end=terminal+coupons;
+    return {initial:p0,terminal,couponCash:c*h*b.freq,coupons,reinvestment:coupons-c*h*b.freq,capital:terminal-p0,total:(end-p0)/p0,annual:Math.pow(end/p0,1/h)-1};
+  }
+  const api={check,price,analyze,shock,holding};
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;
+  root.BondEngine=api;
+})(typeof globalThis==='undefined'?this:globalThis);
+
+</script><script>
+'use strict';
+const $=id=>document.getElementById(id),E=BondEngine,fmt=(n,d=2)=>n.toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}),pct=n=>fmt(n*100)+'%';
+let current;
+function read(){let b={face:+$('face').value,coupon:+$('coupon').value/100,yield:+$('yield').value/100,years:+$('years').value,freq:+$('freq').value};let bp=+$('bp').value,h=+$('hold').value,reinvest=$('reinvest').value==='1';if(!Number.isFinite(bp)||Math.abs(bp)>500)throw Error('冲击范围为−500至+500 bp');return {b,bp,h,reinvest};}
+function table(id,headers,rows){$(id).innerHTML='<thead><tr>'+headers.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</tbody>';}
+function plot(b){let data=[];for(let bp=-200;bp<=200;bp+=10)data.push(E.shock(b,bp));let vals=data.flatMap(s=>[s.exact,s.linear,s.quadratic]),lo=Math.min(0,...vals)*100,hi=Math.max(0,...vals)*100,pad=Math.max(1,(hi-lo)*.08);lo-=pad;hi+=pad;let X=x=>65+(x+200)/400*660,Y=y=>280-(y*100-lo)/(hi-lo)*245;
+ let svg='';for(let k=0;k<=4;k++){let val=lo+(hi-lo)*k/4,y=Y(val/100);svg+=`<line x1="65" y1="${y}" x2="725" y2="${y}" stroke="#e1e8e5"/><text x="57" y="${y+5}" text-anchor="end" font-size="12" fill="#526872">${val.toFixed(1)}%</text>`;}for(let x=-200;x<=200;x+=100)svg+=`<text x="${X(x)}" y="304" text-anchor="middle" font-size="12" fill="#526872">${x>0?'+':''}${x}</text>`;
+ svg+='<text x="398" y="325" text-anchor="middle" font-size="12" fill="#526872">收益率变化（bp）</text><text x="65" y="20" font-size="12" fill="#526872">价格变化率（%）</text>';
+ for(let [key,color,dash] of [['linear','#c16f29','5 4'],['quadratic','#675aa4','3 3'],['exact','#087f82','']])svg+=`<path d="${data.map((s,i)=>(i?'L':'M')+X(s.bp).toFixed(2)+' '+Y(s[key]).toFixed(2)).join(' ')}" fill="none" stroke="${color}" stroke-width="2.6" stroke-dasharray="${dash}"/>`;
+ $('chart').innerHTML=svg;
+}
+function render(){try{current=null;$('error').textContent='';let {b,bp,h,reinvest}=read(),a=E.analyze(b),s=E.shock(b,bp),r=E.holding(b,bp,h,reinvest);let list=[['买入价格（元）',fmt(a.price)],['修正久期（年）',fmt(a.modified,3)],['DV01（元）',fmt(a.dv01,4)],['即时价格变动',pct(s.exact)],['持有期总回报',pct(r.total)],['持有期有效年化',pct(r.annual)]];
+ $('metrics').innerHTML=list.map(([k,v])=>`<div class="metric"><small>${k}</small><strong>${v}</strong></div>`).join('');
+ $('explain').textContent=`收益率从${pct(b.yield)}变为${pct(s.newYield)}。即时重新定价为${fmt(s.price)}元。持有${h}年后，出售价格或到期本金为${fmt(r.terminal)}元，票息合计${fmt(r.couponCash)}元，再投资收益${fmt(r.reinvestment)}元，资本利得/损失${fmt(r.capital)}元。因此持有期总回报为${pct(r.total)}。${r.total<0?'票息收入未能覆盖资本损失。':'在当前情景下，期末总财富高于买入成本。'}`;
+ let scenarios=[-200,-100,-50,0,50,100,200].map(x=>E.shock(b,x));table('scenario',['冲击 bp','新YTM','价格 元','精确变动','久期近似','久期+凸性','久期误差 bp','凸性误差 bp'],scenarios.map(s=>[s.bp,pct(s.newYield),fmt(s.price),pct(s.exact),pct(s.linear),pct(s.quadratic),fmt(s.errorLinear),fmt(s.errorQuadratic)]));table('cashflows',['期数','时间 年','现金流 元','现值 元','现值权重'],a.rows.map(x=>[x.period,fmt(x.year),fmt(x.cashflow),fmt(x.pv),pct(x.weight)]));plot(b);current={b,bp,h,reinvest,a,s,r,scenarios};
+ }catch(err){$('error').textContent=err.message;$('metrics').innerHTML='';$('explain').textContent='请修正输入后重新计算。';$('chart').innerHTML='';$('scenario').innerHTML='';$('cashflows').innerHTML='';}}
+$('form').addEventListener('submit',e=>{e.preventDefault();render();});
+for(let btn of document.querySelectorAll('[data-preset]'))btn.onclick=()=>{const p={long:[2,2,10,1],short:[2,2,2,1],zero:[0,2,10,1]}[btn.dataset.preset];['coupon','yield','years','freq'].forEach((id,i)=>$(id).value=p[i]);$('face').value=1000;$('bp').value=100;$('hold').value=1;$('reinvest').value=0;render();};
+$('export').onclick=()=>{if(!current)return;const {b,bp,h,reinvest,a,s,r,scenarios}=current;let rows=[['Bond Risk Lab v0.1','教学情景'],['generated_at',new Date().toISOString()],['face',b.face],['coupon_decimal',b.coupon],['yield_nominal_decimal',b.yield],['years',b.years],['frequency',b.freq],['shock_bp',bp],['holding_years',h],['coupon_reinvestment',reinvest],['price',a.price],['macaulay_years',a.macaulay],['modified_years',a.modified],['convexity_years_squared',a.convexity],['dv01_yuan',a.dv01],['holding_total_return_decimal',r.total],['holding_effective_annual_return_decimal',r.annual],[],['shock_bp','new_yield_decimal','price','exact_return_decimal','duration_approx_decimal','convexity_approx_decimal','duration_error_bp','convexity_error_bp'],...scenarios.map(x=>[x.bp,x.newYield,x.price,x.exact,x.linear,x.quadratic,x.errorLinear,x.errorQuadratic]),[],['period','time_years','cashflow_yuan','pv_yuan','pv_weight'],...a.rows.map(x=>[x.period,x.year,x.cashflow,x.pv,x.weight])];let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(',')).join('\r\n'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})),link=document.createElement('a');link.href=url;link.download='bond-risk-scenario.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('save').onclick=()=>{try{if(!current)throw Error('请先完成一次有效计算');localStorage.setItem('bond-risk-lab-v01',JSON.stringify(read()));$('status').textContent='已将本组参数保存到当前浏览器。';}catch(e){$('status').textContent='保存失败：'+e.message;}};
+$('restore').onclick=()=>{try{let x=JSON.parse(localStorage.getItem('bond-risk-lab-v01'));if(!x)throw Error('还没有保存过参数');for(let id of ['face','years','freq'])$(id).value=x.b[id];$('coupon').value=x.b.coupon*100;$('yield').value=x.b.yield*100;$('bp').value=x.bp;$('hold').value=x.h;$('reinvest').value=x.reinvest?'1':'0';render();$('status').textContent='已恢复上次保存的参数。';}catch(e){$('status').textContent='恢复失败：'+e.message;}};
+render();
+
+</script></body></html>
+

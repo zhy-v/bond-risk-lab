@@ -1,0 +1,270 @@
+[
+  {
+    "input": {
+      "face": 1000,
+      "coupon": 0.02,
+      "yield": 0.02,
+      "years": 10,
+      "freq": 1
+    },
+    "analysis": {
+      "price": 999.9999999999998,
+      "macaulay": 9.162236706367082,
+      "modified": 8.982585006242237,
+      "convexity": 93.99546153093414,
+      "dv01": 0.8982585006242236,
+      "rows": [
+        {
+          "period": 1,
+          "year": 1,
+          "cashflow": 20,
+          "pv": 19.607843137254903,
+          "weight": 0.01960784313725491
+        },
+        {
+          "period": 2,
+          "year": 2,
+          "cashflow": 20,
+          "pv": 19.223375624759708,
+          "weight": 0.019223375624759714
+        },
+        {
+          "period": 3,
+          "year": 3,
+          "cashflow": 20,
+          "pv": 18.846446690940887,
+          "weight": 0.01884644669094089
+        },
+        {
+          "period": 4,
+          "year": 4,
+          "cashflow": 20,
+          "pv": 18.476908520530284,
+          "weight": 0.01847690852053029
+        },
+        {
+          "period": 5,
+          "year": 5,
+          "cashflow": 20,
+          "pv": 18.114616196598316,
+          "weight": 0.01811461619659832
+        },
+        {
+          "period": 6,
+          "year": 6,
+          "cashflow": 20,
+          "pv": 17.75942764372384,
+          "weight": 0.017759427643723843
+        },
+        {
+          "period": 7,
+          "year": 7,
+          "cashflow": 20,
+          "pv": 17.411203572278275,
+          "weight": 0.01741120357227828
+        },
+        {
+          "period": 8,
+          "year": 8,
+          "cashflow": 20,
+          "pv": 17.069807423802228,
+          "weight": 0.017069807423802232
+        },
+        {
+          "period": 9,
+          "year": 9,
+          "cashflow": 20,
+          "pv": 16.735105317453165,
+          "weight": 0.016735105317453168
+        },
+        {
+          "period": 10,
+          "year": 10,
+          "cashflow": 1020,
+          "pv": 836.7552658726582,
+          "weight": 0.8367552658726585
+        }
+      ]
+    },
+    "shock100": {
+      "bp": 100,
+      "newYield": 0.03,
+      "price": 914.6979716322415,
+      "exact": -0.08530202836775824,
+      "linear": -0.08982585006242237,
+      "quadratic": -0.08512607698587567,
+      "errorLinear": -45.23821694664129,
+      "errorQuadratic": 1.7595138188257475
+    },
+    "holding1": {
+      "initial": 999.9999999999998,
+      "terminal": 922.1389107812088,
+      "couponCash": 20,
+      "coupons": 20,
+      "reinvestment": 0,
+      "capital": -77.861089218791,
+      "total": -0.05786108921879101,
+      "annual": -0.05786108921879096
+    }
+  },
+  {
+    "input": {
+      "face": 1000,
+      "coupon": 0.02,
+      "yield": 0.02,
+      "years": 2,
+      "freq": 1
+    },
+    "analysis": {
+      "price": 1000,
+      "macaulay": 1.980392156862745,
+      "modified": 1.9415609381007304,
+      "convexity": 5.691626900664149,
+      "dv01": 0.19415609381007307,
+      "rows": [
+        {
+          "period": 1,
+          "year": 1,
+          "cashflow": 20,
+          "pv": 19.607843137254903,
+          "weight": 0.0196078431372549
+        },
+        {
+          "period": 2,
+          "year": 2,
+          "cashflow": 1020,
+          "pv": 980.3921568627451,
+          "weight": 0.9803921568627451
+        }
+      ]
+    },
+    "shock100": {
+      "bp": 100,
+      "newYield": 0.03,
+      "price": 980.8653030445848,
+      "exact": -0.019134696955415142,
+      "linear": -0.019415609381007306,
+      "quadratic": -0.0191310280359741,
+      "errorLinear": -2.8091242559216343,
+      "errorQuadratic": 0.03668919441042473
+    },
+    "holding1": {
+      "initial": 1000,
+      "terminal": 990.2912621359224,
+      "couponCash": 20,
+      "coupons": 20,
+      "reinvestment": 0,
+      "capital": -9.708737864077648,
+      "total": 0.010291262135922352,
+      "annual": 0.010291262135922352
+    }
+  },
+  {
+    "input": {
+      "face": 1000,
+      "coupon": 0,
+      "yield": 0.02,
+      "years": 10,
+      "freq": 1
+    },
+    "analysis": {
+      "price": 820.3482998751551,
+      "macaulay": 10,
+      "modified": 9.803921568627452,
+      "convexity": 105.7285659361784,
+      "dv01": 0.8042630390932894,
+      "rows": [
+        {
+          "period": 1,
+          "year": 1,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 2,
+          "year": 2,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 3,
+          "year": 3,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 4,
+          "year": 4,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 5,
+          "year": 5,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 6,
+          "year": 6,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 7,
+          "year": 7,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 8,
+          "year": 8,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 9,
+          "year": 9,
+          "cashflow": 0,
+          "pv": 0,
+          "weight": 0
+        },
+        {
+          "period": 10,
+          "year": 10,
+          "cashflow": 1000,
+          "pv": 820.3482998751551,
+          "weight": 1
+        }
+      ]
+    },
+    "shock100": {
+      "bp": 100,
+      "newYield": 0.03,
+      "price": 744.093914896725,
+      "exact": -0.09295366978883846,
+      "linear": -0.09803921568627452,
+      "quadratic": -0.0927527873894656,
+      "errorLinear": -50.855458974360666,
+      "errorQuadratic": 2.008823993728537
+    },
+    "holding1": {
+      "initial": 820.3482998751551,
+      "terminal": 766.4167323436267,
+      "couponCash": 0,
+      "coupons": 0,
+      "reinvestment": 0,
+      "capital": -53.93156753152846,
+      "total": -0.06574227988250363,
+      "annual": -0.06574227988250358
+    }
+  }
+]

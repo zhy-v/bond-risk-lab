@@ -1,0 +1,44 @@
+[
+  {
+    "name": "long-10y",
+    "source": "synthetic teaching scenario",
+    "bond": {
+      "face": 1000,
+      "coupon": 0.02,
+      "yield": 0.02,
+      "years": 10,
+      "freq": 1
+    },
+    "shockBp": 100,
+    "holdingYears": 1,
+    "reinvest": false
+  },
+  {
+    "name": "short-2y",
+    "source": "synthetic teaching scenario",
+    "bond": {
+      "face": 1000,
+      "coupon": 0.02,
+      "yield": 0.02,
+      "years": 2,
+      "freq": 1
+    },
+    "shockBp": 100,
+    "holdingYears": 1,
+    "reinvest": false
+  },
+  {
+    "name": "zero-10y",
+    "source": "synthetic teaching scenario",
+    "bond": {
+      "face": 1000,
+      "coupon": 0,
+      "yield": 0.02,
+      "years": 10,
+      "freq": 1
+    },
+    "shockBp": 100,
+    "holdingYears": 1,
+    "reinvest": false
+  }
+]

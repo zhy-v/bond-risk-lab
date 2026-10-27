@@ -1,0 +1,75 @@
+{
+  "version": "v0.1",
+  "executedAt": "2026-10-27T02:36:17.897Z",
+  "passed": 17,
+  "checks": [
+    {
+      "name": "par pricing for 1, 2 and 4 coupons annually",
+      "status": "passed"
+    },
+    {
+      "name": "zero coupon closed-form price",
+      "status": "passed"
+    },
+    {
+      "name": "zero coupon duration equals maturity",
+      "status": "passed"
+    },
+    {
+      "name": "zero yield price equals principal plus coupons",
+      "status": "passed"
+    },
+    {
+      "name": "known semiannual textbook price",
+      "status": "passed"
+    },
+    {
+      "name": "price decreases with yield",
+      "status": "passed"
+    },
+    {
+      "name": "cashflow weights sum to one",
+      "status": "passed"
+    },
+    {
+      "name": "modified duration matches central finite differences",
+      "status": "passed"
+    },
+    {
+      "name": "convexity matches central finite differences",
+      "status": "passed"
+    },
+    {
+      "name": "DV01 matches one-basis-point central difference",
+      "status": "passed"
+    },
+    {
+      "name": "convexity reduces approximation error in plus/minus 100bp scenarios",
+      "status": "passed"
+    },
+    {
+      "name": "long bond positive YTM but negative one-year return",
+      "status": "passed"
+    },
+    {
+      "name": "maturity payment has principal exactly once",
+      "status": "passed"
+    },
+    {
+      "name": "no shock and reinvestment reproduce effective annual YTM",
+      "status": "passed"
+    },
+    {
+      "name": "price rises under a valid negative yield",
+      "status": "passed"
+    },
+    {
+      "name": "invalid frequencies and horizons are rejected",
+      "status": "passed"
+    },
+    {
+      "name": "deterministic randomized bond grid satisfies pricing invariants",
+      "status": "passed"
+    }
+  ]
+}
